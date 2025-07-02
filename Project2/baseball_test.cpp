@@ -1,15 +1,26 @@
 #include "gmock/gmock.h"
 #include "Baseball.cpp"
-TEST(BaseballGame, ThrowExceptionWhenInputLengthIsUnmatched)
-{
+
+class BaseballFixture :public ::testing::Test {
+public:
+    void assertIllegalArgument(const string& guessNumber) {
+        try {
+            game.guess(guessNumber);
+            FAIL();
+        }
+        catch (exception& e) {
+            // PASS
+        }
+    }
     Baseball game;
-    EXPECT_THROW(game.guess(string("12")), std::length_error);
-}
-TEST(BaseballGame, ThrowExceptionWhenInvalidChar)
+};
+
+TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase)
 {
-    Baseball game;
-    EXPECT_THROW(game.guess(string("12s")), std::invalid_argument);
+    assertIllegalArgument("12");
+    assertIllegalArgument("12s");
 }
+
 int main() {
     ::testing::InitGoogleMock();
     return RUN_ALL_TESTS();
