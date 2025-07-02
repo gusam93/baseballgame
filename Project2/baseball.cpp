@@ -1,16 +1,25 @@
 #include <stdexcept>
 #include <string>
 
-
 using std::string;
 using std::exception;
+
+struct GuessResult {
+    bool solved;
+    int strikes;
+    int balls;
+};
 class Baseball {
 public:
-    void guess(const string& guessNumber) {
+    Baseball(const string& question) :question(question) {}
+    GuessResult guess(const string& guessNumber) {
         assertIllegalArgument(guessNumber);
+        if (guessNumber == question) {
+            return { true, 3, 0 };
+        }
+        return { false, 3, 0 };
     }
-private:
-    void assertIllegalArgument(const std::string& guessNumber)
+    void assertIllegalArgument(const string& guessNumber)
     {
         if (guessNumber.length() != 3) {
             throw std::length_error("Must be three letters");
@@ -23,11 +32,12 @@ private:
             throw std::invalid_argument("Must not have same number");
         }
     }
-    bool isDuplicateNumber(const std::string& guessNumber)
+    bool isDuplicateNumber(const string& guessNumber)
     {
         return guessNumber[0] == guessNumber[1]
             || guessNumber[0] == guessNumber[2]
             || guessNumber[1] == guessNumber[2];
     }
-
+private:
+    string question;
 };
